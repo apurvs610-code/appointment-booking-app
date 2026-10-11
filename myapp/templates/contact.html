@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+{%load static%}
+{% block contentarea %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+section id="contact">
+    <div class="container">
+        <div class="contact-title">
+            <h2>Contact Us</h2>
+            <p>We're here to help you. Feel free to contact us anytime.</p>
+        </div>
+
+        <div class="contact-row">
+            <div class="contact-info">
+                <h3>Hospital Information</h3>
+                <p><strong>📍 Address:</strong> Varanasi, Uttar Pradesh, India</p>
+                <p><strong>📞 Phone:</strong> +91 98765 43210</p>
+                <p><strong>📧 Email:</strong> hospital@example.com</p>
+                <p><strong>🕒 Timing:</strong> Monday - Saturday (9:00 AM - 6:00 PM)</p>
+            </div>
+
+            <div class="contact-form">
+                <form>
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea rows="5" placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
+{% endblock %}

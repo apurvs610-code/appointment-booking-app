@@ -1,0 +1,38 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block contentarea %}
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        .container {
+        width: 450px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 10px #888888;
+        }
+        label{
+        font-size: 20px;
+        font-weight: bold;
+        }
+        input, select, textarea {
+        font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <h1>Book an Appointment</h1>
+    <hr>
+        <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+        </form>
+</div>
+
+</body>
+</html>
+{% endblock %}

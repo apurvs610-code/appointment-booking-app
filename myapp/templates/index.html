@@ -1,0 +1,1144 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block contentarea %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body, .page-content {
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* ───────── HERO ───────── */
+    .hero {
+        position: relative;
+        min-height: 92vh;
+        background: linear-gradient(135deg, #0a0a4b 0%, #0d3476 45%, #0a6e5c 100%);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        padding: 60px 80px;
+    }
+
+    /* animated blobs */
+    .hero::before {
+        content: '';
+        position: absolute;
+        width: 600px; height: 600px;
+        background: radial-gradient(circle, rgba(65,209,173,0.18) 0%, transparent 70%);
+        border-radius: 50%;
+        top: -150px; right: -100px;
+        animation: blobFloat 8s ease-in-out infinite;
+    }
+    .hero::after {
+        content: '';
+        position: absolute;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(65,209,173,0.12) 0%, transparent 70%);
+        border-radius: 50%;
+        bottom: -80px; left: -80px;
+        animation: blobFloat 10s ease-in-out infinite reverse;
+    }
+    @keyframes blobFloat {
+        0%,100% { transform: translateY(0) scale(1); }
+        50%      { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* floating particles */
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+        position: absolute;
+        width: 6px; height: 6px;
+        background: rgba(65,209,173,0.5);
+        border-radius: 50%;
+        animation: particleDrift linear infinite;
+    }
+    @keyframes particleDrift {
+        0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 1; }
+        100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 60px;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .hero-left { flex: 1; min-width: 300px; }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(65,209,173,0.15);
+        border: 1px solid rgba(65,209,173,0.4);
+        color: #41d1ad;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        backdrop-filter: blur(10px);
+        letter-spacing: 0.5px;
+        animation: fadeSlideDown 0.8s ease both;
+    }
+    .hero-badge i { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+    .hero-title {
+        font-size: 58px;
+        font-weight: 900;
+        color: white;
+        line-height: 1.1;
+        margin-bottom: 20px;
+        animation: fadeSlideDown 0.9s ease 0.1s both;
+    }
+    .hero-title .grad-text {
+        background: linear-gradient(90deg, #41d1ad, #7ee8d0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 17px;
+        color: rgba(255,255,255,0.78);
+        line-height: 1.8;
+        max-width: 500px;
+        margin-bottom: 36px;
+        font-weight: 300;
+        animation: fadeSlideDown 1s ease 0.2s both;
+    }
+
+    .hero-btns {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        animation: fadeSlideDown 1s ease 0.3s both;
+    }
+
+    .btn-primary-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, #41d1ad, #2eb896);
+        color: #0a0a4b;
+        padding: 16px 36px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s;
+        box-shadow: 0 8px 32px rgba(65,209,173,0.4);
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-primary-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #7ee8d0, #41d1ad);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .btn-primary-hero:hover::before { opacity: 1; }
+    .btn-primary-hero:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 40px rgba(65,209,173,0.5);
+        text-decoration: none;
+        color: #0a0a4b;
+    }
+    .btn-primary-hero span, .btn-primary-hero i { position: relative; z-index: 1; }
+
+    .btn-ghost-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255,255,255,0.08);
+        color: white;
+        padding: 16px 36px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1.5px solid rgba(255,255,255,0.35);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s;
+    }
+    .btn-ghost-hero:hover {
+        background: rgba(255,255,255,0.18);
+        border-color: #41d1ad;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-3px);
+    }
+
+    /* hero right — image ring */
+    .hero-right {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: fadeSlideUp 1s ease 0.2s both;
+    }
+
+    .img-wrapper {
+        position: relative;
+        width: 360px;
+        height: 360px;
+    }
+    .img-wrapper img {
+        width: 360px;
+        height: 360px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 6px solid #41d1ad;
+        box-shadow: 0 0 0 16px rgba(65,209,173,0.12), 0 20px 60px rgba(0,0,0,0.4);
+        animation: imgFloat 6s ease-in-out infinite;
+    }
+    @keyframes imgFloat {
+        0%,100% { transform: translateY(0); }
+        50%      { transform: translateY(-16px); }
+    }
+
+    /* floating badges on image */
+    .float-badge {
+        position: absolute;
+        background: white;
+        border-radius: 14px;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+        animation: badgeFloat 5s ease-in-out infinite;
+        font-family: 'Poppins', sans-serif;
+    }
+    .float-badge.b1 { top: 20px; left: -30px; animation-delay: 0s; }
+    .float-badge.b2 { bottom: 40px; right: -30px; animation-delay: 1.5s; }
+    .float-badge.b3 { top: 50%; left: -50px; transform: translateY(-50%); animation-delay: 3s; }
+    @keyframes badgeFloat {
+        0%,100% { transform: translateY(0); }
+        50%      { transform: translateY(-8px); }
+    }
+    .float-badge.b3 { animation: badgeFloat3 5s ease-in-out infinite; }
+    @keyframes badgeFloat3 {
+        0%,100% { transform: translateY(-50%); }
+        50%      { transform: translateY(calc(-50% - 8px)); }
+    }
+
+    .badge-icon {
+        width: 38px; height: 38px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 18px;
+    }
+    .badge-icon.green { background: #e8fdf7; color: #41d1ad; }
+    .badge-icon.blue  { background: #e8f0fd; color: #0a0a4b; }
+    .badge-icon.red   { background: #fde8e8; color: #e05454; }
+
+    .badge-text p { margin: 0; font-size: 11px; color: #888; font-weight: 500; }
+    .badge-text strong { font-size: 14px; color: #1a1a2e; }
+
+    /* Animations */
+    @keyframes fadeSlideDown {
+        from { opacity: 0; transform: translateY(-24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ───────── STATS ───────── */
+    .stats-section {
+        background: white;
+        padding: 0 80px;
+        position: relative;
+        z-index: 10;
+        margin-top: -30px;
+    }
+    .stats-inner {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(10,10,75,0.12);
+        padding: 36px 48px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
+    }
+    .stat-item {
+        text-align: center;
+        position: relative;
+    }
+    .stat-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: -40px; top: 10%; height: 80%;
+        width: 1px;
+        background: linear-gradient(to bottom, transparent, #e0e8f0, transparent);
+    }
+    .stat-num {
+        font-size: 42px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #0a0a4b, #41d1ad);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        font-family: 'Poppins', sans-serif;
+    }
+    .stat-label {
+        font-size: 13px;
+        color: #888;
+        font-weight: 600;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .stat-icon-wrap {
+        width: 52px; height: 52px;
+        background: linear-gradient(135deg, #e8fdf7, #d0f7ee);
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px;
+        color: #41d1ad;
+        margin: 0 auto 12px;
+    }
+
+    /* ───────── SECTION BASE ───────── */
+    .sec {
+        padding: 90px 80px;
+    }
+    .sec-alt { background: linear-gradient(180deg, #f0f6ff 0%, #e8f5f1 100%); }
+
+    .sec-header { text-align: center; margin-bottom: 60px; }
+    .sec-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, #e8fdf7, #d0f7ee);
+        color: #0a6e5c;
+        padding: 6px 18px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+    }
+    .sec-title {
+        font-size: 38px;
+        font-weight: 800;
+        color: #0a0a4b;
+        margin-bottom: 12px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .sec-title span { color: #41d1ad; }
+    .sec-desc { font-size: 16px; color: #777; max-width: 500px; margin: 0 auto; line-height: 1.7; }
+    .sec-line {
+        width: 70px; height: 4px;
+        background: linear-gradient(90deg, #41d1ad, #0a0a4b);
+        margin: 18px auto 0;
+        border-radius: 2px;
+    }
+
+    /* ───────── SERVICES ───────── */
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 28px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+    .svc-card {
+        background: white;
+        border-radius: 22px;
+        padding: 36px 24px;
+        text-align: center;
+        box-shadow: 0 4px 24px rgba(10,10,75,0.06);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+    }
+    .svc-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #0a0a4b, #0a6e5c);
+        opacity: 0;
+        transition: opacity 0.4s;
+        border-radius: 22px;
+    }
+    .svc-card:hover::before { opacity: 1; }
+    .svc-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 24px 60px rgba(10,10,75,0.2); }
+    .svc-card:hover .svc-icon { background: rgba(255,255,255,0.15); color: #41d1ad; }
+    .svc-card:hover h4, .svc-card:hover p { color: white; }
+
+    .svc-icon {
+        width: 72px; height: 72px;
+        background: linear-gradient(135deg, #e8fdf7, #d0f7ee);
+        border-radius: 20px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 30px;
+        color: #41d1ad;
+        margin: 0 auto 20px;
+        transition: all 0.4s;
+        position: relative; z-index: 1;
+    }
+    .svc-card h4 {
+        font-size: 17px;
+        font-weight: 700;
+        color: #0a0a4b;
+        margin-bottom: 10px;
+        position: relative; z-index: 1;
+        transition: color 0.4s;
+        font-family: 'Poppins', sans-serif;
+    }
+    .svc-card p {
+        font-size: 13px;
+        color: #888;
+        line-height: 1.7;
+        position: relative; z-index: 1;
+        transition: color 0.4s;
+    }
+
+    /* ───────── DOCTORS ───────── */
+    .doctors-grid {
+        display: flex;
+        gap: 32px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .doc-card {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        width: 260px;
+        box-shadow: 0 8px 32px rgba(10,10,75,0.08);
+        transition: all 0.4s;
+        position: relative;
+    }
+    .doc-card:hover { transform: translateY(-12px); box-shadow: 0 24px 60px rgba(10,10,75,0.18); }
+
+    .doc-img-wrap {
+        position: relative;
+        overflow: hidden;
+        height: 220px;
+    }
+    .doc-img-wrap img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+    .doc-card:hover .doc-img-wrap img { transform: scale(1.08); }
+
+    .doc-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(10,10,75,0.85) 0%, transparent 60%);
+        opacity: 0;
+        transition: opacity 0.4s;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 20px;
+    }
+    .doc-card:hover .doc-overlay { opacity: 1; }
+
+    .doc-body {
+        padding: 20px;
+        text-align: center;
+    }
+    .doc-spec {
+        display: inline-block;
+        background: linear-gradient(135deg, #e8fdf7, #d0f7ee);
+        color: #0a6e5c;
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .doc-body h4 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0a0a4b;
+        margin-bottom: 4px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .doc-rating {
+        color: #f5c518;
+        font-size: 13px;
+        margin-bottom: 14px;
+    }
+    .doc-rating span { color: #888; font-size: 12px; }
+
+    .btn-book-sm {
+        display: inline-block;
+        background: linear-gradient(135deg, #0a0a4b, #0d3476);
+        color: white;
+        padding: 10px 24px;
+        border-radius: 24px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-family: 'Poppins', sans-serif;
+    }
+    .btn-book-sm:hover {
+        background: linear-gradient(135deg, #41d1ad, #2eb896);
+        color: #0a0a4b;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(65,209,173,0.3);
+    }
+
+    /* view all btn */
+    .btn-center { text-align: center; margin-top: 44px; }
+    .btn-outline-main {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: transparent;
+        border: 2px solid #0a0a4b;
+        color: #0a0a4b;
+        padding: 14px 36px;
+        border-radius: 50px;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-family: 'Poppins', sans-serif;
+    }
+    .btn-outline-main:hover {
+        background: #0a0a4b;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(10,10,75,0.2);
+    }
+
+    /* ───────── HOW IT WORKS ───────── */
+    .steps-wrap {
+        display: flex;
+        gap: 0;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .steps-wrap::before {
+        content: '';
+        position: absolute;
+        top: 36px;
+        left: 12%;
+        right: 12%;
+        height: 2px;
+        background: linear-gradient(90deg, #41d1ad, #0a0a4b);
+        z-index: 0;
+    }
+    .step-item {
+        text-align: center;
+        flex: 1;
+        min-width: 160px;
+        padding: 0 16px;
+        position: relative;
+        z-index: 1;
+    }
+    .step-num {
+        width: 72px; height: 72px;
+        background: linear-gradient(135deg, #0a0a4b, #0d3476);
+        color: white;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 26px;
+        font-weight: 900;
+        margin: 0 auto 20px;
+        box-shadow: 0 8px 28px rgba(10,10,75,0.3);
+        border: 4px solid white;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s;
+    }
+    .step-item:hover .step-num {
+        background: linear-gradient(135deg, #41d1ad, #2eb896);
+        color: #0a0a4b;
+        transform: scale(1.1);
+        box-shadow: 0 12px 32px rgba(65,209,173,0.4);
+    }
+    .step-item h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #0a0a4b;
+        margin-bottom: 10px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .step-item p {
+        font-size: 13px;
+        color: #888;
+        line-height: 1.7;
+    }
+
+    /* ───────── TESTIMONIALS ───────── */
+    .testi-grid {
+        display: flex;
+        gap: 28px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .testi-card {
+        background: white;
+        border-radius: 20px;
+        padding: 32px;
+        max-width: 340px;
+        box-shadow: 0 8px 32px rgba(10,10,75,0.07);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+    .testi-card::before {
+        content: '\201C';
+        position: absolute;
+        top: -10px; right: 24px;
+        font-size: 100px;
+        color: rgba(65,209,173,0.12);
+        font-family: Georgia, serif;
+        line-height: 1;
+    }
+    .testi-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 50px rgba(10,10,75,0.13);
+    }
+    .testi-stars { color: #f5c518; font-size: 15px; margin-bottom: 14px; }
+    .testi-text {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        font-style: italic;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+        width: 46px; height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0a0a4b, #41d1ad);
+        display: flex; align-items: center; justify-content: center;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+    }
+    .testi-name { font-size: 15px; font-weight: 700; color: #0a0a4b; font-family: 'Poppins', sans-serif; }
+    .testi-role { font-size: 12px; color: #41d1ad; font-weight: 600; }
+
+    /* ───────── CTA BANNER ───────── */
+    .cta-banner {
+        margin: 0 80px 80px;
+        background: linear-gradient(135deg, #0a0a4b 0%, #0d3476 50%, #0a6e5c 100%);
+        border-radius: 32px;
+        padding: 70px 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        flex-wrap: wrap;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 24px 80px rgba(10,10,75,0.3);
+    }
+    .cta-banner::before {
+        content: '';
+        position: absolute;
+        width: 500px; height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(65,209,173,0.15) 0%, transparent 70%);
+        top: -150px; right: -100px;
+        pointer-events: none;
+    }
+    .cta-banner::after {
+        content: '';
+        position: absolute;
+        width: 300px; height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        bottom: -80px; left: 20%;
+        pointer-events: none;
+    }
+    .cta-left { position: relative; z-index: 1; }
+    .cta-tag {
+        display: inline-block;
+        background: rgba(65,209,173,0.2);
+        color: #41d1ad;
+        padding: 6px 18px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        border: 1px solid rgba(65,209,173,0.3);
+    }
+    .cta-banner h2 {
+        font-size: 38px;
+        font-weight: 800;
+        color: white;
+        line-height: 1.2;
+        margin-bottom: 14px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .cta-banner p {
+        font-size: 16px;
+        color: rgba(255,255,255,0.75);
+        max-width: 460px;
+        line-height: 1.7;
+    }
+    .cta-right { position: relative; z-index: 1; }
+    .btn-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: linear-gradient(135deg, #41d1ad, #2eb896);
+        color: #0a0a4b;
+        padding: 18px 44px;
+        border-radius: 50px;
+        font-size: 17px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: all 0.3s;
+        box-shadow: 0 10px 36px rgba(65,209,173,0.45);
+        white-space: nowrap;
+        font-family: 'Poppins', sans-serif;
+    }
+    .btn-cta:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 18px 50px rgba(65,209,173,0.6);
+        color: #0a0a4b;
+        text-decoration: none;
+    }
+    .btn-cta i { font-size: 20px; }
+
+    /* ───────── FOOTER ───────── */
+    .site-footer {
+        background: #060630;
+        color: rgba(255,255,255,0.6);
+        text-align: center;
+        padding: 28px 80px;
+        font-size: 14px;
+        border-top: 1px solid rgba(65,209,173,0.15);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+        color: rgba(255,255,255,0.55);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.3s;
+    }
+    .footer-links a:hover { color: #41d1ad; }
+    .footer-brand { color: #41d1ad; font-weight: 700; }
+
+    /* ───────── SCROLL ANIMATIONS ───────── */
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+</style>
+
+<!-- ═══════════════════════════════════════════ HERO ═══ -->
+<section class="hero">
+    <div class="particles" id="particles"></div>
+    <div class="hero-content">
+        <div class="hero-left">
+            <div class="hero-badge">
+                <i class="fa fa-circle"></i>
+                Trusted Healthcare Platform
+            </div>
+            <h1 class="hero-title">
+                Your Health,<br>Our <span class="grad-text">Priority.</span>
+            </h1>
+            <p class="hero-subtitle">
+                Book appointments with top-rated specialists in seconds. Expert medical care — at your convenience, whenever you need it.
+            </p>
+            <div class="hero-btns">
+                <a href="{% url 'book' %}" class="btn-primary-hero">
+                    <i class="fa fa-calendar-plus-o"></i>
+                    <span>Book Appointment</span>
+                </a>
+                <a href="{% url 'doctor' %}" class="btn-ghost-hero">
+                    <i class="fa fa-user-md"></i>
+                    Meet Doctors
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="img-wrapper">
+                <img src="{% static 'image/doctor.jpeg' %}" alt="Doctor">
+
+                <div class="float-badge b1">
+                    <div class="badge-icon green"><i class="fa fa-check"></i></div>
+                    <div class="badge-text">
+                        <p>Appointments</p>
+                        <strong>500+ Booked</strong>
+                    </div>
+                </div>
+
+                <div class="float-badge b2">
+                    <div class="badge-icon blue"><i class="fa fa-star"></i></div>
+                    <div class="badge-text">
+                        <p>Rating</p>
+                        <strong>4.9 / 5.0</strong>
+                    </div>
+                </div>
+
+                <div class="float-badge b3">
+                    <div class="badge-icon red"><i class="fa fa-heartbeat"></i></div>
+                    <div class="badge-text">
+                        <p>Availability</p>
+                        <strong>24 / 7</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ STATS ═══ -->
+<div class="stats-section">
+    <div class="stats-inner reveal">
+        <div class="stat-item">
+            <div class="stat-icon-wrap"><i class="fa fa-users"></i></div>
+            <div class="stat-num">500+</div>
+            <div class="stat-label">Patients Served</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon-wrap"><i class="fa fa-user-md"></i></div>
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Expert Doctors</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon-wrap"><i class="fa fa-stethoscope"></i></div>
+            <div class="stat-num">5+</div>
+            <div class="stat-label">Specializations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon-wrap"><i class="fa fa-clock-o"></i></div>
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Online Booking</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon-wrap"><i class="fa fa-smile-o"></i></div>
+            <div class="stat-num">98%</div>
+            <div class="stat-label">Satisfaction</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SERVICES ═══ -->
+<section class="sec">
+    <div class="sec-header reveal">
+        <div class="sec-tag">What We Offer</div>
+        <h2 class="sec-title">Our <span>Services</span></h2>
+        <p class="sec-desc">Comprehensive healthcare services tailored to your every need, available whenever you need them.</p>
+        <div class="sec-line"></div>
+    </div>
+    <div class="services-grid">
+        <div class="svc-card reveal reveal-delay-1">
+            <div class="svc-icon"><i class="fa fa-heartbeat"></i></div>
+            <h4>General Checkup</h4>
+            <p>Routine examinations and preventive care for all ages, keeping you ahead of health issues.</p>
+        </div>
+        <div class="svc-card reveal reveal-delay-2">
+            <div class="svc-icon"><i class="fa fa-stethoscope"></i></div>
+            <h4>Specialist Consult</h4>
+            <p>Connect with certified specialists for targeted diagnosis and expert treatment plans.</p>
+        </div>
+        <div class="svc-card reveal reveal-delay-3">
+            <div class="svc-icon"><i class="fa fa-calendar-check-o"></i></div>
+            <h4>Easy Scheduling</h4>
+            <p>Book, reschedule, and manage appointments online in just a few clicks, anytime.</p>
+        </div>
+        <div class="svc-card reveal reveal-delay-4">
+            <div class="svc-icon"><i class="fa fa-ambulance"></i></div>
+            <h4>Emergency Care</h4>
+            <p>Immediate assistance for urgent medical situations — fast, professional, and reliable.</p>
+        </div>
+        <div class="svc-card reveal reveal-delay-1">
+            <div class="svc-icon"><i class="fa fa-flask"></i></div>
+            <h4>Lab Tests</h4>
+            <p>Quick and accurate diagnostic lab services with results delivered to your profile.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ DOCTORS ═══ -->
+<section class="sec sec-alt">
+    <div class="sec-header reveal">
+        <div class="sec-tag">Our Team</div>
+        <h2 class="sec-title">Meet Our <span>Doctors</span></h2>
+        <p class="sec-desc">Experienced and compassionate medical professionals dedicated to your wellbeing.</p>
+        <div class="sec-line"></div>
+    </div>
+    <div class="doctors-grid">
+        <div class="doc-card reveal reveal-delay-1">
+            <div class="doc-img-wrap">
+                <img src="{% static 'image/doctor.jpeg' %}" alt="Dr. Jony">
+                <div class="doc-overlay">
+                    <a href="{% url 'book' %}" class="btn-book-sm" style="color:white;">Book Appointment</a>
+                </div>
+            </div>
+            <div class="doc-body">
+                <div class="doc-spec">General Physician</div>
+                <h4>Dr. Jony</h4>
+                <div class="doc-rating">
+                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    <span>(4.9)</span>
+                </div>
+                <a href="{% url 'book' %}" class="btn-book-sm">Book Now</a>
+            </div>
+        </div>
+        <div class="doc-card reveal reveal-delay-2">
+            <div class="doc-img-wrap">
+                <img src="{% static 'image/doctor 1.jpeg' %}" alt="Dr. Kushagra">
+                <div class="doc-overlay">
+                    <a href="{% url 'book' %}" class="btn-book-sm" style="color:white;">Book Appointment</a>
+                </div>
+            </div>
+            <div class="doc-body">
+                <div class="doc-spec">Specialist</div>
+                <h4>Dr. Kushagra Singh</h4>
+                <div class="doc-rating">
+                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i>
+                    <span>(4.7)</span>
+                </div>
+                <a href="{% url 'book' %}" class="btn-book-sm">Book Now</a>
+            </div>
+        </div>
+        <div class="doc-card reveal reveal-delay-3">
+            <div class="doc-img-wrap">
+                <img src="{% static 'image/doctor 2.jpeg' %}" alt="Dr. Sarah">
+                <div class="doc-overlay">
+                    <a href="{% url 'book' %}" class="btn-book-sm" style="color:white;">Book Appointment</a>
+                </div>
+            </div>
+            <div class="doc-body">
+                <div class="doc-spec">Cardiologist</div>
+                <h4>Dr. Sarah</h4>
+                <div class="doc-rating">
+                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    <span>(5.0)</span>
+                </div>
+                <a href="{% url 'book' %}" class="btn-book-sm">Book Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="btn-center reveal">
+        <a href="{% url 'doctor' %}" class="btn-outline-main">
+            View All Doctors <i class="fa fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ HOW IT WORKS ═══ -->
+<section class="sec">
+    <div class="sec-header reveal">
+        <div class="sec-tag">Simple Process</div>
+        <h2 class="sec-title">How It <span>Works</span></h2>
+        <p class="sec-desc">Getting the care you need is simple. Follow these four easy steps.</p>
+        <div class="sec-line"></div>
+    </div>
+    <div class="steps-wrap">
+        <div class="step-item reveal reveal-delay-1">
+            <div class="step-num">1</div>
+            <h4>Choose a Doctor</h4>
+            <p>Browse our team of certified medical professionals and pick the right fit.</p>
+        </div>
+        <div class="step-item reveal reveal-delay-2">
+            <div class="step-num">2</div>
+            <h4>Pick a Date</h4>
+            <p>Select an available date and time slot that works for your schedule.</p>
+        </div>
+        <div class="step-item reveal reveal-delay-3">
+            <div class="step-num">3</div>
+            <h4>Fill Your Details</h4>
+            <p>Provide your name, contact info, and reason for the visit.</p>
+        </div>
+        <div class="step-item reveal reveal-delay-4">
+            <div class="step-num">4</div>
+            <h4>Get Confirmed</h4>
+            <p>Appointment is booked instantly — we'll be ready and waiting for you!</p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ TESTIMONIALS ═══ -->
+<section class="sec sec-alt">
+    <div class="sec-header reveal">
+        <div class="sec-tag">Patient Stories</div>
+        <h2 class="sec-title">What Our <span>Patients</span> Say</h2>
+        <p class="sec-desc">Real experiences from real people who trusted us with their health.</p>
+        <div class="sec-line"></div>
+    </div>
+    <div class="testi-grid">
+        <div class="testi-card reveal reveal-delay-1">
+            <div class="testi-stars">
+                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+            </div>
+            <p class="testi-text">"Booking was incredibly easy and the doctor was fantastic. The whole process took less than 2 minutes. Highly recommend this platform!"</p>
+            <div class="testi-author">
+                <div class="testi-avatar">R</div>
+                <div>
+                    <div class="testi-name">Rahul Sharma</div>
+                    <div class="testi-role">Verified Patient</div>
+                </div>
+            </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-2">
+            <div class="testi-stars">
+                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+            </div>
+            <p class="testi-text">"Finally a healthcare booking system that actually works! Dr. Kushagra was very professional. I'll definitely be coming back."</p>
+            <div class="testi-author">
+                <div class="testi-avatar">P</div>
+                <div>
+                    <div class="testi-name">Priya Patel</div>
+                    <div class="testi-role">Verified Patient</div>
+                </div>
+            </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-3">
+            <div class="testi-stars">
+                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i>
+            </div>
+            <p class="testi-text">"The dashboard is clean and the reminder system is great. My family now exclusively uses this for all our doctor appointments."</p>
+            <div class="testi-author">
+                <div class="testi-avatar">A</div>
+                <div>
+                    <div class="testi-name">Arjun Mehta</div>
+                    <div class="testi-role">Verified Patient</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ CTA ═══ -->
+<div class="cta-banner reveal">
+    <div class="cta-left">
+        <div class="cta-tag">&#x2665; Take Action Today</div>
+        <h2>Ready to Take Care<br>of Your Health?</h2>
+        <p>Don't put it off. Book your appointment today and take the first step toward a healthier, happier you.</p>
+    </div>
+    <div class="cta-right">
+        <a href="{% url 'book' %}" class="btn-cta">
+            Book Appointment <i class="fa fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ FOOTER ═══ -->
+<footer class="site-footer">
+    <div>&copy; 2026 <span class="footer-brand">HealthCare</span> — All rights reserved.</div>
+    <div class="footer-links">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'doctor' %}">Doctors</a>
+        <a href="{% url 'book' %}">Book</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'contact' %}">Contact</a>
+    </div>
+</footer>
+
+<script>
+    // ── Generate floating particles ──
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 22; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.cssText = `
+            left: ${Math.random() * 100}%;
+            width: ${Math.random() * 6 + 3}px;
+            height: ${Math.random() * 6 + 3}px;
+            animation-duration: ${Math.random() * 14 + 10}s;
+            animation-delay: ${Math.random() * 10}s;
+            opacity: ${Math.random() * 0.5 + 0.2};
+        `;
+        container.appendChild(p);
+    }
+
+    // ── Scroll reveal ──
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Animated counters ──
+    function animateCount(el, target, suffix) {
+        let start = 0;
+        const duration = 1800;
+        const step = target / (duration / 16);
+        const timer = setInterval(() => {
+            start = Math.min(start + step, target);
+            el.textContent = Math.floor(start) + suffix;
+            if (start >= target) clearInterval(timer);
+        }, 16);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                const nums = e.target.querySelectorAll('.stat-num');
+                const data = [
+                    { val: 500, suf: '+' },
+                    { val: 10,  suf: '+' },
+                    { val: 5,   suf: '+' },
+                    { val: 24,  suf: '/7' },
+                    { val: 98,  suf: '%' }
+                ];
+                nums.forEach((n, i) => animateCount(n, data[i].val, data[i].suf));
+                statsObserver.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    const statsEl = document.querySelector('.stats-inner');
+    if (statsEl) statsObserver.observe(statsEl);
+</script>
+
+{% endblock %}
